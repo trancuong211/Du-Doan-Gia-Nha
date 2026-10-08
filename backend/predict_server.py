@@ -36,7 +36,7 @@ def jsonify(data):
 MODEL_DIR = Path(__file__).resolve().parent.parent / "models"
 loaded_models = {}
 
-MODEL_KEYS = ["nha_pho", "biet_thu", "can_ho", "nha_hem"]
+MODEL_KEYS = ["can_ho"]
 
 
 def train_missing_model(key):
@@ -47,10 +47,7 @@ def train_missing_model(key):
     _MD.mkdir(exist_ok=True)
 
     TYPE_KEY_MAP = {
-        "nha_pho": "Nha pho",
-        "biet_thu": "Biet thu",
         "can_ho": "Can ho chung cu",
-        "nha_hem": "Nha hem",
     }
     house_type_name = TYPE_KEY_MAP.get(key)
     if not house_type_name or house_type_name not in TYPE_CONFIG:
@@ -93,45 +90,26 @@ def health():
     })
 
 
-VALID_HOUSE_TYPES = {"nha_pho", "biet_thu", "can_ho", "nha_hem"}
+VALID_HOUSE_TYPES = {"can_ho"}
 
 FEATURE_RANGES = {
     "dien_tich": (1, 10000, "float"),
-    "dien_tich_dat": (1, 10000, "float"),
-    "dien_tich_san_vuon": (0, 5000, "float"),
     "so_phong_ngu": (1, 20, "int"),
     "so_phong_tam": (1, 15, "int"),
-    "so_tang": (1, 50, "int"),
     "tang": (1, 60, "int"),
     "tong_so_tang_toa_nha": (1, 80, "int"),
     "nam_xay_dung": (1900, 2030, "int"),
     "nam_ban_giao": (1900, 2035, "int"),
-    "mat_tien": (0, 200, "float"),
-    "khoang_cach_trung_tam": (0, 100, "float"),
-    "do_sau": (1, 200, "float"),
-    "do_rong_duong": (1, 100, "float"),
-    "do_rong_hem": (0.5, 50, "float"),
-    "do_rong_duong_chinh": (1, 100, "float"),
-    "khoang_cach_ra_duong_chinh": (0, 5000, "float"),
     "phi_quan_ly": (0, 500, "float"),
     "quan": (0, 20, "int"),
     "phuong": (0, 500, "int"),
     "huong_nha": (0, 7, "int"),
     "phap_ly": (0, 3, "int"),
-    "vi_tri_mat_tien": (0, 2, "int"),
     "chat_luong_xay_dung": (0, 2, "int"),
-    "loai_biet_thu": (0, 2, "int"),
     "view": (0, 3, "int"),
-    "vi_tri_hem": (0, 1, "int"),
-    "co_kinh_doanh": (0, 1, "int"),
-    "co_san_thuong": (0, 1, "int"),
-    "co_be_boi": (0, 1, "int"),
-    "co_gara": (0, 1, "int"),
     "co_thang_may": (0, 1, "int"),
     "co_ham": (0, 1, "int"),
-    "co_oto_vao_hem": (0, 1, "int"),
     "ten_du_an": (0, 20, "int"),
-    "tuoi_nha": (0, 200, "int"),
 }
 
 

@@ -9,8 +9,8 @@ sys.path.insert(0, str(Path(__file__).resolve().parent))
 
 from constants import (
     DATA_DIR, MODEL_DIR, DISTRICTS, HUONG, PHAP_LY,
-    VI_TRI_MAT_TIEN, CHAT_LUONG_XAY_DUNG, LOAI_BIET_THU,
-    VIEW_TYPES, VI_TRI_HEM, WARD_MAPPING, TYPE_FEATURES, DU_AN_CAN_HO
+    CHAT_LUONG_XAY_DUNG, VIEW_TYPES, WARD_MAPPING,
+    TYPE_FEATURES, DU_AN_CAN_HO
 )
 from train_advanced import encode_data, TYPE_CONFIG
 from train_improved import add_features

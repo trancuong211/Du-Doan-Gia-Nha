@@ -21,15 +21,12 @@ from scipy.stats import randint, uniform
 
 from constants import (
     DATA_DIR, MODEL_DIR, DISTRICTS, HUONG, PHAP_LY,
-    VI_TRI_MAT_TIEN, CHAT_LUONG_XAY_DUNG, LOAI_BIET_THU,
-    VIEW_TYPES, VI_TRI_HEM, WARD_MAPPING, TYPE_FEATURES, DU_AN_CAN_HO
+    CHAT_LUONG_XAY_DUNG, VIEW_TYPES, WARD_MAPPING,
+    TYPE_FEATURES, DU_AN_CAN_HO
 )
 
 TYPE_CONFIG = {
-    "Nha pho": {"csv": DATA_DIR / "nha_pho.csv", "model_key": "nha_pho"},
-    "Biet thu": {"csv": DATA_DIR / "biet_thu.csv", "model_key": "biet_thu"},
     "Can ho chung cu": {"csv": DATA_DIR / "can_ho_chung_cu.csv", "model_key": "can_ho"},
-    "Nha hem": {"csv": DATA_DIR / "nha_hem.csv", "model_key": "nha_hem"},
 }
 
 
@@ -40,21 +37,12 @@ def encode_data(df, house_type_name):
     df['huong_nha'] = df['huong_nha'].map({h: i for i, h in enumerate(HUONG)})
     df['phap_ly'] = df['phap_ly'].map({p: i for i, p in enumerate(PHAP_LY)})
 
-    if house_type_name == "Nha pho":
-        df['vi_tri_mat_tien'] = df['vi_tri_mat_tien'].map({v: i for i, v in enumerate(VI_TRI_MAT_TIEN)})
-        df['chat_luong_xay_dung'] = df['chat_luong_xay_dung'].map({c: i for i, c in enumerate(CHAT_LUONG_XAY_DUNG)})
-    elif house_type_name == "Biet thu":
-        df['loai_biet_thu'] = df['loai_biet_thu'].map({l: i for i, l in enumerate(LOAI_BIET_THU)})
-        df['view'] = df['view'].map({v: i for i, v in enumerate(VIEW_TYPES)})
-        df['chat_luong_xay_dung'] = df['chat_luong_xay_dung'].map({c: i for i, c in enumerate(CHAT_LUONG_XAY_DUNG)})
-    elif house_type_name == "Can ho chung cu":
+    if house_type_name == "Can ho chung cu":
         df['view'] = df['view'].map({v: i for i, v in enumerate(VIEW_TYPES)})
         df['chat_luong_xay_dung'] = df['chat_luong_xay_dung'].map({c: i for i, c in enumerate(CHAT_LUONG_XAY_DUNG)})
         if 'ten_du_an' in df.columns:
             du_an_map = {name: i for i, name in enumerate(DU_AN_CAN_HO)}
             df['ten_du_an'] = df['ten_du_an'].map(du_an_map).fillna(0).astype(int)
-    elif house_type_name == "Nha hem":
-        df['vi_tri_hem'] = df['vi_tri_hem'].map({v: i for i, v in enumerate(VI_TRI_HEM)})
 
     return df
 
@@ -63,39 +51,13 @@ def add_features(df, house_type_name):
     """Them features moi tu du lieu hien co"""
     df = df.copy()
 
-    if house_type_name == "Nha pho":
-        if 'dien_tich' in df.columns and 'mat_tien' in df.columns:
-            df['dien_tich_x_mat_tien'] = df['dien_tich'] * df['mat_tien']
-        if 'dien_tich' in df.columns and 'so_phong_ngu' in df.columns:
-            df['dien_tich_per_phong'] = df['dien_tich'] / (df['so_phong_ngu'] + 1)
-        if 'dien_tich' in df.columns and 'so_tang' in df.columns:
-            df['dien_tich_per_tang'] = df['dien_tich'] / (df['so_tang'] + 1)
-        if 'mat_tien' in df.columns and 'do_rong_duong' in df.columns:
-            df['mat_tien_per_duong'] = df['mat_tien'] / (df['do_rong_duong'] + 1)
-
-    elif house_type_name == "Biet thu":
-        if 'dien_tich_dat' in df.columns and 'dien_tich_san_vuon' in df.columns:
-            df['ty_le_vuon'] = df['dien_tich_san_vuon'] / (df['dien_tich_dat'] + 1)
-        if 'dien_tich_dat' in df.columns and 'so_phong_ngu' in df.columns:
-            df['dien_tich_per_phong'] = df['dien_tich_dat'] / (df['so_phong_ngu'] + 1)
-        if 'dien_tich_dat' in df.columns and 'mat_tien' in df.columns:
-            df['dien_tich_x_mat_tien'] = df['dien_tich_dat'] * df['mat_tien']
-
-    elif house_type_name == "Can ho chung cu":
+    if house_type_name == "Can ho chung cu":
         if 'dien_tich' in df.columns and 'so_phong_ngu' in df.columns:
             df['dien_tich_per_phong'] = df['dien_tich'] / (df['so_phong_ngu'] + 1)
         if 'tang' in df.columns and 'tong_so_tang_toa_nha' in df.columns:
             df['ty_le_tang'] = df['tang'] / (df['tong_so_tang_toa_nha'] + 1)
         if 'phi_quan_ly' in df.columns and 'dien_tich' in df.columns:
             df['phi_x_dien_tich'] = df['phi_quan_ly'] * df['dien_tich']
-
-    elif house_type_name == "Nha hem":
-        if 'dien_tich' in df.columns and 'do_rong_hem' in df.columns:
-            df['dien_tich_x_rong_hem'] = df['dien_tich'] * df['do_rong_hem']
-        if 'dien_tich' in df.columns and 'so_phong_ngu' in df.columns:
-            df['dien_tich_per_phong'] = df['dien_tich'] / (df['so_phong_ngu'] + 1)
-        if 'khoang_cach_ra_duong_chinh' in df.columns and 'do_rong_hem' in df.columns:
-            df['kc_x_rong_hem'] = df['khoang_cach_ra_duong_chinh'] * df['do_rong_hem']
 
     return df
 

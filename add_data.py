@@ -15,35 +15,17 @@ import subprocess
 
 from constants import (
     DISTRICTS, HUONG, PHAP_LY,
-    VI_TRI_MAT_TIEN, CHAT_LUONG_XAY_DUNG, LOAI_BIET_THU,
-    VIEW_TYPES, VI_TRI_HEM, DU_AN_CAN_HO, WARDS
+    VI_TRI_MAT_TIEN, CHAT_LUONG_XAY_DUNG,
+    VIEW_TYPES, DU_AN_CAN_HO, WARDS
 )
 
 DATA_DIR = Path("data/raw")
 
 CSV_FILES = {
-    "Nha pho": DATA_DIR / "nha_pho.csv",
-    "Biet thu": DATA_DIR / "biet_thu.csv",
     "Can ho chung cu": DATA_DIR / "can_ho_chung_cu.csv",
-    "Nha hem": DATA_DIR / "nha_hem.csv",
 }
 
-HOUSE_TYPES = ["Nha pho", "Biet thu", "Can ho chung cu", "Nha hem"]
-
-NHA_PHO_COLUMNS = [
-    "dien_tich", "quan", "phuong", "so_phong_ngu", "so_phong_tam", "so_tang",
-    "huong_nha", "nam_xay_dung", "mat_tien", "khoang_cach_trung_tam", "phap_ly",
-    "do_sau", "do_rong_duong", "vi_tri_mat_tien", "co_kinh_doanh",
-    "chat_luong_xay_dung", "tuoi_nha", "co_san_thuong", "gia"
-]
-
-BIET_THU_COLUMNS = [
-    "dien_tich_dat", "quan", "phuong", "so_phong_ngu", "so_phong_tam",
-    "so_tang", "huong_nha", "nam_xay_dung", "mat_tien",
-    "khoang_cach_trung_tam", "phap_ly",
-    "dien_tich_san_vuon", "co_be_boi", "co_gara", "loai_biet_thu",
-    "view", "chat_luong_xay_dung", "tuoi_nha", "gia"
-]
+HOUSE_TYPES = ["Can ho chung cu"]
 
 CAN_HO_COLUMNS = [
     "dien_tich", "quan", "phuong", "so_phong_ngu", "so_phong_tam",
@@ -52,18 +34,8 @@ CAN_HO_COLUMNS = [
     "co_thang_may", "co_ham", "phap_ly", "chat_luong_xay_dung", "gia"
 ]
 
-NHA_HEM_COLUMNS = [
-    "dien_tich", "quan", "phuong", "so_phong_ngu", "so_phong_tam", "so_tang",
-    "huong_nha", "nam_xay_dung", "mat_tien", "khoang_cach_trung_tam", "phap_ly",
-    "do_rong_hem", "vi_tri_hem", "do_rong_duong_chinh",
-    "co_oto_vao_hem", "khoang_cach_ra_duong_chinh", "gia"
-]
-
 TYPE_COLUMNS = {
-    "Nha pho": NHA_PHO_COLUMNS,
-    "Biet thu": BIET_THU_COLUMNS,
     "Can ho chung cu": CAN_HO_COLUMNS,
-    "Nha hem": NHA_HEM_COLUMNS,
 }
 
 
@@ -93,7 +65,7 @@ def prompt_number(label, cast=float, default=None):
 def main():
     print("=== THEM DU LIEU NHA MOI ===")
 
-    house_type = prompt_choice("Loai nha", HOUSE_TYPES)
+    house_type = "Can ho chung cu"
 
     dien_tich = prompt_number("Dien tich (m2)")
     so_phong_ngu = prompt_number("So phong ngu", int)
@@ -115,46 +87,19 @@ def main():
         "phap_ly": phap_ly, "gia": gia,
     }
 
-    if house_type == "Nha pho":
-        new_row["mat_tien"] = prompt_number("Mat tien (m)")
-        new_row["do_sau"] = prompt_number("Do sau (m)", default=12)
-        new_row["do_rong_duong"] = prompt_number("Do rong duong (m)", default=10)
-        new_row["vi_tri_mat_tien"] = prompt_choice("Vi tri mat tien", VI_TRI_MAT_TIEN)
-        new_row["co_kinh_doanh"] = 1 if input("Co kinh doanh? (y/n): ").strip().lower() == "y" else 0
-        new_row["chat_luong_xay_dung"] = prompt_choice("Chat luong xay dung", CHAT_LUONG_XAY_DUNG)
-        new_row["tuoi_nha"] = 2026 - nam_xay_dung
-        new_row["co_san_thuong"] = 1 if input("Co san thuong? (y/n): ").strip().lower() == "y" else 0
-    elif house_type == "Biet thu":
-        new_row["dien_tich_dat"] = dien_tich
-        new_row["mat_tien"] = prompt_number("Mat tien (m)")
-        new_row["dien_tich_san_vuon"] = prompt_number("Dien tich san vuon (m2)", default=50)
-        new_row["co_be_boi"] = 1 if input("Co be boi? (y/n): ").strip().lower() == "y" else 0
-        new_row["co_gara"] = 1 if input("Co gara? (y/n): ").strip().lower() == "y" else 1
-        new_row["loai_biet_thu"] = prompt_choice("Loai biet thu", LOAI_BIET_THU)
-        new_row["view"] = prompt_choice("View", VIEW_TYPES)
-        new_row["chat_luong_xay_dung"] = prompt_choice("Chat luong xay dung", CHAT_LUONG_XAY_DUNG)
-        new_row["tuoi_nha"] = 2026 - nam_xay_dung
-    elif house_type == "Can ho chung cu":
-        new_row["tang"] = prompt_number("Tang hien tai", int, default=10)
-        new_row["tong_so_tang_toa_nha"] = prompt_number("Tong so tang toa nha", int, default=25)
-        new_row["view"] = prompt_choice("View", VIEW_TYPES)
-        print("\nDu an:")
-        for i, d in enumerate(DU_AN_CAN_HO, 1):
-            print(f"  {i}. {d}")
-        new_row["ten_du_an"] = prompt_choice("Du an", DU_AN_CAN_HO)
-        new_row["nam_ban_giao"] = prompt_number("Nam ban giao", int, default=2024)
-        new_row["phi_quan_ly"] = prompt_number("Phi quan ly (nghin/m2/thang)", default=15)
-        new_row["co_thang_may"] = 1 if input("Co thang may? (y/n): ").strip().lower() == "y" else 1
-        new_row["co_ham"] = 1 if input("Co ham? (y/n): ").strip().lower() == "y" else 0
-        new_row["chat_luong_xay_dung"] = prompt_choice("Chat luong xay dung", CHAT_LUONG_XAY_DUNG)
-        new_row["mat_tien"] = 0
-    else:
-        new_row["mat_tien"] = 0
-        new_row["do_rong_hem"] = prompt_number("Do rong hem (m)", default=3.5)
-        new_row["vi_tri_hem"] = prompt_choice("Vi tri hem", VI_TRI_HEM)
-        new_row["do_rong_duong_chinh"] = prompt_number("Do rong duong chinh (m)", default=8)
-        new_row["co_oto_vao_hem"] = 1 if input("O to vao hem duoc? (y/n): ").strip().lower() == "y" else 1
-        new_row["khoang_cach_ra_duong_chinh"] = prompt_number("Khoang cach ra duong chinh (m)", default=50)
+    new_row["tang"] = prompt_number("Tang hien tai", int, default=10)
+    new_row["tong_so_tang_toa_nha"] = prompt_number("Tong so tang toa nha", int, default=25)
+    new_row["view"] = prompt_choice("View", VIEW_TYPES)
+    print("\nDu an:")
+    for i, d in enumerate(DU_AN_CAN_HO, 1):
+        print(f"  {i}. {d}")
+    new_row["ten_du_an"] = prompt_choice("Du an", DU_AN_CAN_HO)
+    new_row["nam_ban_giao"] = prompt_number("Nam ban giao", int, default=2024)
+    new_row["phi_quan_ly"] = prompt_number("Phi quan ly (nghin/m2/thang)", default=15)
+    new_row["co_thang_may"] = 1 if input("Co thang may? (y/n): ").strip().lower() == "y" else 1
+    new_row["co_ham"] = 1 if input("Co ham? (y/n): ").strip().lower() == "y" else 0
+    new_row["chat_luong_xay_dung"] = prompt_choice("Chat luong xay dung", CHAT_LUONG_XAY_DUNG)
+    new_row["mat_tien"] = 0
 
     csv_path = CSV_FILES[house_type]
     columns = TYPE_COLUMNS[house_type]

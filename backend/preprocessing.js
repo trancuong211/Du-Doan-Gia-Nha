@@ -11,11 +11,8 @@ const DISTRICTS = [
 
 const HUONG = ["Đông", "Tây", "Nam", "Bắc", "Đông Nam", "Đông Bắc", "Tây Nam", "Tây Bắc"];
 const PHAP_LY = ["Sổ hồng", "Sổ đỏ", "Giấy tờ tay", "Đang chờ sổ"];
-const VI_TRI_MAT_TIEN = ["Mặt tiền đường lớn", "Mặt tiền hẻm", "Mặt tiền ngã tư"];
 const CHAT_LUONG_XAY_DUNG = ["Cao cấp", "Trung bình", "Thô"];
-const LOAI_BIET_THU = ["Đơn lập", "Song lập", "Hàng kề"];
 const VIEW_TYPES = ["Sông", "Thành phố", "Nội khu", "Không view"];
-const VI_TRI_HEM = ["Hẻm thông", "Hẻm cụt"];
 
 const WARDS = {
     "Quận 1": ["Bến Nghé", "Bến Thành", "Cầu Kho", "Cầu Ông Lãnh", "Đa Kao", "Nguyễn Cư Trinh", "Nguyễn Thái Bình", "Tân Định"],
@@ -72,49 +69,7 @@ function preprocessInput(data, houseType) {
 
     const features = {};
 
-    if (houseType === "nha_pho") {
-        Object.assign(features, {
-            dien_tich: data.dien_tich || 80,
-            quan: quanIdx,
-            phuong: phuongIdx,
-            so_phong_ngu: data.so_phong_ngu || 3,
-            so_phong_tam: data.so_phong_tam || 2,
-            so_tang: data.so_tang || 3,
-            huong_nha: huongIdx,
-            nam_xay_dung: namXayDung,
-            mat_tien: data.mat_tien || 5,
-            khoang_cach_trung_tam: data.khoang_cach_trung_tam || 5,
-            phap_ly: phapLyIdx,
-            do_sau: data.do_sau || 12,
-            do_rong_duong: data.do_rong_duong || 10,
-            vi_tri_mat_tien: safeIndex(VI_TRI_MAT_TIEN, data.vi_tri_mat_tien, 1),
-            co_kinh_doanh: data.co_kinh_doanh || 0,
-            chat_luong_xay_dung: safeIndex(CHAT_LUONG_XAY_DUNG, data.chat_luong_xay_dung, 1),
-            tuoi_nha: tuoiNha,
-            co_san_thuong: data.co_san_thuong || 0,
-        });
-    } else if (houseType === "biet_thu") {
-        Object.assign(features, {
-            dien_tich_dat: data.dien_tich || 250,
-            quan: quanIdx,
-            phuong: phuongIdx,
-            so_phong_ngu: data.so_phong_ngu || 4,
-            so_phong_tam: data.so_phong_tam || 3,
-            so_tang: data.so_tang || 2,
-            huong_nha: huongIdx,
-            nam_xay_dung: namXayDung,
-            mat_tien: data.mat_tien || 10,
-            khoang_cach_trung_tam: data.khoang_cach_trung_tam || 5,
-            phap_ly: phapLyIdx,
-            dien_tich_san_vuon: data.dien_tich_san_vuon || 50,
-            co_be_boi: data.co_be_boi || 0,
-            co_gara: data.co_gara || 1,
-            loai_biet_thu: safeIndex(LOAI_BIET_THU, data.loai_biet_thu),
-            view: safeIndex(VIEW_TYPES, data.view, 3),
-            chat_luong_xay_dung: safeIndex(CHAT_LUONG_XAY_DUNG, data.chat_luong_xay_dung, 1),
-            tuoi_nha: tuoiNha,
-        });
-    } else if (houseType === "can_ho") {
+    if (houseType === "can_ho") {
         Object.assign(features, {
             dien_tich: data.dien_tich || 75,
             quan: quanIdx,
@@ -134,25 +89,6 @@ function preprocessInput(data, houseType) {
             phap_ly: phapLyIdx,
             chat_luong_xay_dung: safeIndex(CHAT_LUONG_XAY_DUNG, data.chat_luong_xay_dung, 1),
         });
-    } else if (houseType === "nha_hem") {
-        Object.assign(features, {
-            dien_tich: data.dien_tich || 55,
-            quan: quanIdx,
-            phuong: phuongIdx,
-            so_phong_ngu: data.so_phong_ngu || 3,
-            so_phong_tam: data.so_phong_tam || 2,
-            so_tang: data.so_tang || 2,
-            huong_nha: huongIdx,
-            nam_xay_dung: namXayDung,
-            mat_tien: 0,
-            khoang_cach_trung_tam: data.khoang_cach_trung_tam || 5,
-            phap_ly: phapLyIdx,
-            do_rong_hem: data.do_rong_hem || 3.5,
-            vi_tri_hem: safeIndex(VI_TRI_HEM, data.vi_tri_hem),
-            do_rong_duong_chinh: data.do_rong_duong_chinh || 8,
-            co_oto_vao_hem: data.co_oto_vao_hem || 1,
-            khoang_cach_ra_duong_chinh: data.khoang_cach_ra_duong_chinh || 50,
-        });
     }
 
     return features;
@@ -163,11 +99,8 @@ module.exports = {
     DISTRICTS,
     HUONG,
     PHAP_LY,
-    VI_TRI_MAT_TIEN,
     CHAT_LUONG_XAY_DUNG,
-    LOAI_BIET_THU,
     VIEW_TYPES,
-    VI_TRI_HEM,
     WARDS,
     WARD_MAPPING
 };

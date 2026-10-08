@@ -15,8 +15,8 @@ sys.path.insert(0, os.path.abspath(os.path.dirname(__file__)))
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 
 from constants import (
-    DISTRICTS, HUONG, PHAP_LY, VI_TRI_MAT_TIEN, CHAT_LUONG_XAY_DUNG,
-    LOAI_BIET_THU, VIEW_TYPES, VI_TRI_HEM, WARD_MAPPING,
+    DISTRICTS, HUONG, PHAP_LY, CHAT_LUONG_XAY_DUNG,
+    VIEW_TYPES, WARD_MAPPING,
     MODEL_DIR, TYPE_FEATURES, DU_AN_CAN_HO, WARDS
 )
 from train_advanced import encode_data, get_models, TYPE_CONFIG
@@ -50,65 +50,13 @@ class TestConstants(unittest.TestCase):
         self.assertEqual(len(DU_AN_CAN_HO), 17)
 
     def test_type_features_cover_all_types(self):
-        for key in ["Nha pho", "Biet thu", "Can ho chung cu", "Nha hem"]:
+        for key in ["Can ho chung cu"]:
             self.assertIn(key, TYPE_FEATURES, f"Missing TYPE_FEATURES for {key}")
             self.assertGreater(len(TYPE_FEATURES[key]), 0)
 
 
 class TestPreprocessing(unittest.TestCase):
     """Test feature encoding and preprocessing"""
-
-    def test_encode_data_nha_pho(self):
-        df = pd.DataFrame({
-            "dien_tich": [80, 100],
-            "quan": ["Quận 7", "Quận 1"],
-            "phuong": ["1", "Bến Nghé"],
-            "so_phong_ngu": [3, 4],
-            "so_phong_tam": [2, 3],
-            "so_tang": [3, 4],
-            "huong_nha": ["Nam", "Đông"],
-            "nam_xay_dung": [2020, 2015],
-            "mat_tien": [5, 10],
-            "khoang_cach_trung_tam": [5, 2],
-            "phap_ly": ["Sổ hồng", "Sổ đỏ"],
-            "do_sau": [12, 15],
-            "do_rong_duong": [10, 12],
-            "vi_tri_mat_tien": ["Mặt tiền đường lớn", "Mặt tiền hẻm"],
-            "co_kinh_doanh": [0, 1],
-            "chat_luong_xay_dung": ["Trung bình", "Cao cấp"],
-            "tuoi_nha": [6, 11],
-            "co_san_thuong": [0, 0],
-            "gia": [5.0, 15.0],
-        })
-        result = encode_data(df, "Nha pho")
-        self.assertIn("quan", result.columns)
-        self.assertTrue(result["quan"].dtype in [np.int64, np.int32, int])
-
-    def test_encode_data_biet_thu(self):
-        df = pd.DataFrame({
-            "dien_tich_dat": [250, 400],
-            "quan": ["Quận 7", "Quận 1"],
-            "phuong": ["1", "Bến Nghé"],
-            "so_phong_ngu": [4, 5],
-            "so_phong_tam": [3, 4],
-            "so_tang": [2, 3],
-            "huong_nha": ["Nam", "Đông"],
-            "nam_xay_dung": [2018, 2010],
-            "mat_tien": [10, 15],
-            "khoang_cach_trung_tam": [3, 1],
-            "phap_ly": ["Sổ hồng", "Sổ đỏ"],
-            "dien_tich_san_vuon": [50, 100],
-            "co_be_boi": [1, 0],
-            "co_gara": [1, 1],
-            "loai_biet_thu": ["Đơn lập", "Song lập"],
-            "view": ["Sông", "Thành phố"],
-            "chat_luong_xay_dung": ["Cao cấp", "Cao cấp"],
-            "tuoi_nha": [8, 16],
-            "gia": [25.0, 50.0],
-        })
-        result = encode_data(df, "Biet thu")
-        self.assertIn("loai_biet_thu", result.columns)
-        self.assertTrue(result["loai_biet_thu"].dtype in [np.int64, np.int32, int])
 
     def test_encode_data_can_ho(self):
         df = pd.DataFrame({
@@ -135,30 +83,6 @@ class TestPreprocessing(unittest.TestCase):
         self.assertIn("ten_du_an", result.columns)
         self.assertTrue(result["ten_du_an"].dtype in [np.int64, np.int32, int])
 
-    def test_encode_data_nha_hem(self):
-        df = pd.DataFrame({
-            "dien_tich": [55, 70],
-            "quan": ["Quận 7", "Quận 1"],
-            "phuong": ["1", "Bến Nghé"],
-            "so_phong_ngu": [3, 4],
-            "so_phong_tam": [2, 2],
-            "so_tang": [2, 3],
-            "huong_nha": ["Nam", "Đông"],
-            "nam_xay_dung": [2015, 2010],
-            "mat_tien": [0, 0],
-            "khoang_cach_trung_tam": [5, 2],
-            "phap_ly": ["Sổ hồng", "Sổ đỏ"],
-            "do_rong_hem": [3.5, 4.0],
-            "vi_tri_hem": ["Hẻm thông", "Hẻm cụt"],
-            "do_rong_duong_chinh": [8, 12],
-            "co_oto_vao_hem": [1, 0],
-            "khoang_cach_ra_duong_chinh": [50, 100],
-            "gia": [2.0, 5.0],
-        })
-        result = encode_data(df, "Nha hem")
-        self.assertIn("vi_tri_hem", result.columns)
-        self.assertTrue(result["vi_tri_hem"].dtype in [np.int64, np.int32, int])
-
     def test_get_models_returns_three(self):
         models = get_models()
         self.assertEqual(len(models), 3)
@@ -171,7 +95,7 @@ class TestModelFiles(unittest.TestCase):
     """Test saved model files"""
 
     def test_model_files_exist(self):
-        for key in ["nha_pho", "biet_thu", "can_ho", "nha_hem"]:
+        for key in ["can_ho"]:
             model_path = MODEL_DIR / f"{key}_model.pkl"
             if model_path.exists():
                 data = joblib.load(model_path)
@@ -180,7 +104,7 @@ class TestModelFiles(unittest.TestCase):
                 self.assertIn("house_type", data)
 
     def test_feature_names_match_type_features(self):
-        for key in ["nha_pho", "biet_thu", "can_ho", "nha_hem"]:
+        for key in ["can_ho"]:
             model_path = MODEL_DIR / f"{key}_model.pkl"
             if model_path.exists():
                 data = joblib.load(model_path)
@@ -189,7 +113,7 @@ class TestModelFiles(unittest.TestCase):
                 self.assertGreater(len(features), 0)
 
     def test_model_can_predict(self):
-        for key in ["nha_pho", "biet_thu", "can_ho", "nha_hem"]:
+        for key in ["can_ho"]:
             model_path = MODEL_DIR / f"{key}_model.pkl"
             if model_path.exists():
                 data = joblib.load(model_path)
@@ -210,7 +134,7 @@ class TestTypeConfig(unittest.TestCase):
             self.assertIn("model_key", config, f"{name} missing model_key")
 
     def test_model_keys_match_expected(self):
-        expected_keys = {"nha_pho", "biet_thu", "can_ho", "nha_hem"}
+        expected_keys = {"can_ho"}
         actual_keys = {config["model_key"] for config in TYPE_CONFIG.values()}
         self.assertEqual(actual_keys, expected_keys)
 

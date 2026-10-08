@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>AI Định Giá Nhà - TP.HCM</title>
+    <title>AI Định Giá Căn Hộ - TP.HCM</title>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
@@ -20,9 +20,9 @@
     <div class="container">
       <header>
         <span class="eyebrow">Định giá bất động sản bằng AI</span>
-        <h1>AI Định Giá Nhà</h1>
+        <h1>AI Định Giá Căn Hộ</h1>
         <p class="subtitle">
-          TP. Hồ Chí Minh · 4 loại hình bất động sản · LightGBM / RandomForest ·
+          TP. Hồ Chí Minh · Căn hộ chung cư · LightGBM / RandomForest ·
           5-fold CV
         </p>
       </header>
@@ -36,11 +36,8 @@
             <div class="form-row">
               <div class="form-group full-width">
                 <label for="house_type">Loai nha</label>
-                <select id="house_type" onchange="updateForm()">
-                  <option value="nha_pho">Nha pho</option>
-                  <option value="biet_thu">Biet thu</option>
-                  <option value="can_ho">Can ho chung cu</option>
-                  <option value="nha_hem">Nha hem</option>
+                <select id="house_type" onchange="updateForm()" disabled>
+                  <option value="can_ho" selected>Can ho chung cu</option>
                 </select>
               </div>
             </div>
@@ -104,110 +101,10 @@
                 />
               </div>
             </div>
-            <div class="form-row">
-              <div class="form-group" id="fg_so_tang">
-                <label for="so_tang">So tang</label>
-                <input type="number" id="so_tang" value="3" min="1" max="50" />
-              </div>
-              <div class="form-group" id="fg_mat_tien">
-                <label for="mat_tien">Mat tien (m)</label>
-                <input type="number" id="mat_tien" value="5" step="0.5" />
-              </div>
-              <div class="form-group" id="fg_khoang_cach_trung_tam">
-                <label for="khoang_cach_trung_tam">Khoang cach TT (km)</label>
-                <input
-                  type="number"
-                  id="khoang_cach_trung_tam"
-                  value="5"
-                  step="0.5"
-                />
-              </div>
-            </div>
-          </div>
-
-          <!-- Nha pho -->
-          <div id="nha_pho_fields" class="type-fields">
-            <h3>Dac tinh Nha pho</h3>
-            <div class="form-row">
-              <div class="form-group">
-                <label for="do_sau">Do sau (m)</label>
-                <input type="number" id="do_sau" value="12" step="0.5" />
-              </div>
-              <div class="form-group">
-                <label for="do_rong_duong">Do rong duong (m)</label>
-                <input type="number" id="do_rong_duong" value="10" step="0.5" />
-              </div>
-            </div>
-            <div class="form-row">
-              <div class="form-group">
-                <label for="vi_tri_mat_tien">Vi tri mat tien</label>
-                <select id="vi_tri_mat_tien"></select>
-              </div>
-              <div class="form-group">
-                <label for="chat_luong_xay_dung">Chat luong</label>
-                <select id="chat_luong_xay_dung"></select>
-              </div>
-            </div>
-            <div class="form-row">
-              <div class="form-group checkbox">
-                <input type="checkbox" id="co_kinh_doanh" />
-                <label for="co_kinh_doanh">Co kinh doanh</label>
-              </div>
-              <div class="form-group checkbox">
-                <input type="checkbox" id="co_san_thuong" />
-                <label for="co_san_thuong">Co san thuong</label>
-              </div>
-            </div>
-          </div>
-
-          <!-- Biet thu -->
-          <div id="biet_thu_fields" class="type-fields hidden">
-            <h3>Dac tinh Biet thu</h3>
-            <div class="form-row">
-              <div class="form-group">
-                <label for="dien_tich_dat">Dien tich dat (m2)</label>
-                <input type="number" id="dien_tich_dat" value="150" step="1" />
-              </div>
-              <div class="form-group">
-                <label for="dien_tich_san_vuon">Dien tich san vuon (m2)</label>
-                <input
-                  type="number"
-                  id="dien_tich_san_vuon"
-                  value="50"
-                  step="1"
-                />
-              </div>
-            </div>
-            <div class="form-row">
-              <div class="form-group">
-                <label for="loai_biet_thu">Loai biet thu</label>
-                <select id="loai_biet_thu"></select>
-              </div>
-            </div>
-            <div class="form-row">
-              <div class="form-group">
-                <label for="view_bt">View</label>
-                <select id="view_bt"></select>
-              </div>
-              <div class="form-group">
-                <label for="chat_luong_xay_dung_bt">Chat luong</label>
-                <select id="chat_luong_xay_dung_bt"></select>
-              </div>
-            </div>
-            <div class="form-row">
-              <div class="form-group checkbox">
-                <input type="checkbox" id="co_be_boi" />
-                <label for="co_be_boi">Co be boi</label>
-              </div>
-              <div class="form-group checkbox">
-                <input type="checkbox" id="co_gara" checked />
-                <label for="co_gara">Co gara</label>
-              </div>
-            </div>
           </div>
 
           <!-- Can ho -->
-          <div id="can_ho_fields" class="type-fields hidden">
+          <div id="can_ho_fields" class="type-fields">
             <h3>Dac tinh Can ho</h3>
             <div class="form-row">
               <div class="form-group">
@@ -269,47 +166,6 @@
             </div>
           </div>
 
-          <!-- Nha hem -->
-          <div id="nha_hem_fields" class="type-fields hidden">
-            <h3>Dac tinh Nha hem</h3>
-            <div class="form-row">
-              <div class="form-group">
-                <label for="do_rong_hem">Do rong hem (m)</label>
-                <input type="number" id="do_rong_hem" value="3.5" step="0.5" />
-              </div>
-              <div class="form-group">
-                <label for="vi_tri_hem">Vi tri hem</label>
-                <select id="vi_tri_hem"></select>
-              </div>
-            </div>
-            <div class="form-row">
-              <div class="form-group">
-                <label for="do_rong_duong_chinh">Do rong duong chinh (m)</label>
-                <input
-                  type="number"
-                  id="do_rong_duong_chinh"
-                  value="8"
-                  step="0.5"
-                />
-              </div>
-              <div class="form-group">
-                <label for="khoang_cach_ra_duong_chinh"
-                  >Khoang cach ra duong (m)</label
-                >
-                <input
-                  type="number"
-                  id="khoang_cach_ra_duong_chinh"
-                  value="50"
-                  step="10"
-                />
-              </div>
-            </div>
-            <div class="form-group checkbox">
-              <input type="checkbox" id="co_oto_vao_hem" checked />
-              <label for="co_oto_vao_hem">O to vao hem duoc</label>
-            </div>
-          </div>
-
           <button id="predictBtn" onclick="predict()">DU DOAN GIA</button>
         </div>
 
@@ -344,7 +200,7 @@
       </div>
 
       <footer>
-        <p>AI Du Doan Gia Nha HCM - LightGBM/RandomForest + 5-fold CV</p>
+        <p>AI Du Doan Gia Can Ho HCM - LightGBM/RandomForest + 5-fold CV</p>
       </footer>
     </div>
 

@@ -141,8 +141,8 @@ function callPredictServer(data, callback) {
 
 // Meta data
 app.get('/meta', (req, res) => {
-    const { DISTRICTS, HUONG, PHAP_LY, VI_TRI_MAT_TIEN, CHAT_LUONG_XAY_DUNG,
-            LOAI_BIET_THU, VIEW_TYPES, VI_TRI_HEM, WARDS } = require('./preprocessing');
+    const { DISTRICTS, HUONG, PHAP_LY, CHAT_LUONG_XAY_DUNG,
+            VIEW_TYPES, WARDS } = require('./preprocessing');
 
     const DU_AN_CAN_HO = [
         "Vinhomes Grand Park", "Sunrise City", "The Estella", "Masteri Thao Dien",
@@ -156,11 +156,8 @@ app.get('/meta', (req, res) => {
         wards: WARDS,
         huong: HUONG,
         phap_ly: PHAP_LY,
-        vi_tri_mat_tien: VI_TRI_MAT_TIEN,
         chat_luong_xay_dung: CHAT_LUONG_XAY_DUNG,
-        loai_biet_thu: LOAI_BIET_THU,
         view: VIEW_TYPES,
-        vi_tri_hem: VI_TRI_HEM,
         du_an_can_ho: DU_AN_CAN_HO,
     });
 });
@@ -170,8 +167,8 @@ app.post('/predict', (req, res) => {
     try {
         const { house_type } = req.body;
 
-        if (!house_type || !['nha_pho', 'biet_thu', 'can_ho', 'nha_hem'].includes(house_type)) {
-            return res.status(400).json({ error: 'Invalid house_type' });
+        if (!house_type || house_type !== 'can_ho') {
+            return res.status(400).json({ error: 'Invalid house_type. Only "can_ho" is supported.' });
         }
 
         if (!predictServerReady) {

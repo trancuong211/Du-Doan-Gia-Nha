@@ -21,16 +21,13 @@ from lightgbm import LGBMRegressor
 
 from constants import (
     DATA_DIR, MODEL_DIR, DISTRICTS, HUONG, PHAP_LY,
-    VI_TRI_MAT_TIEN, CHAT_LUONG_XAY_DUNG, LOAI_BIET_THU,
-    VIEW_TYPES, VI_TRI_HEM, WARD_MAPPING, TYPE_FEATURES,
+    VI_TRI_MAT_TIEN, CHAT_LUONG_XAY_DUNG,
+    VIEW_TYPES, WARD_MAPPING, TYPE_FEATURES,
     DU_AN_CAN_HO
 )
 
 TYPE_CONFIG = {
-    "Nha pho": {"csv": DATA_DIR / "nha_pho.csv", "model_key": "nha_pho"},
-    "Biet thu": {"csv": DATA_DIR / "biet_thu.csv", "model_key": "biet_thu"},
     "Can ho chung cu": {"csv": DATA_DIR / "can_ho_chung_cu.csv", "model_key": "can_ho"},
-    "Nha hem": {"csv": DATA_DIR / "nha_hem.csv", "model_key": "nha_hem"},
 }
 
 
@@ -41,21 +38,12 @@ def encode_data(df, house_type_name):
     df['huong_nha'] = df['huong_nha'].map({h: i for i, h in enumerate(HUONG)})
     df['phap_ly'] = df['phap_ly'].map({p: i for i, p in enumerate(PHAP_LY)})
 
-    if house_type_name == "Nha pho":
-        df['vi_tri_mat_tien'] = df['vi_tri_mat_tien'].map({v: i for i, v in enumerate(VI_TRI_MAT_TIEN)})
-        df['chat_luong_xay_dung'] = df['chat_luong_xay_dung'].map({c: i for i, c in enumerate(CHAT_LUONG_XAY_DUNG)})
-    elif house_type_name == "Biet thu":
-        df['loai_biet_thu'] = df['loai_biet_thu'].map({l: i for i, l in enumerate(LOAI_BIET_THU)})
-        df['view'] = df['view'].map({v: i for i, v in enumerate(VIEW_TYPES)})
-        df['chat_luong_xay_dung'] = df['chat_luong_xay_dung'].map({c: i for i, c in enumerate(CHAT_LUONG_XAY_DUNG)})
-    elif house_type_name == "Can ho chung cu":
+    if house_type_name == "Can ho chung cu":
         df['view'] = df['view'].map({v: i for i, v in enumerate(VIEW_TYPES)})
         df['chat_luong_xay_dung'] = df['chat_luong_xay_dung'].map({c: i for i, c in enumerate(CHAT_LUONG_XAY_DUNG)})
         if 'ten_du_an' in df.columns:
             du_an_map = {name: i for i, name in enumerate(DU_AN_CAN_HO)}
             df['ten_du_an'] = df['ten_du_an'].map(du_an_map).fillna(0).astype(int)
-    elif house_type_name == "Nha hem":
-        df['vi_tri_hem'] = df['vi_tri_hem'].map({v: i for i, v in enumerate(VI_TRI_HEM)})
 
     return df
 

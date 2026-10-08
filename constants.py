@@ -18,8 +18,8 @@ DISTRICTS = [
 ]
 
 # House types
-HOUSE_TYPES = ["Nhà phố", "Biệt thự", "Căn hộ chung cư", "Nhà hẻm"]
-TYPE_KEYS = ["nha_pho", "biet_thu", "can_ho", "nha_hem"]
+HOUSE_TYPES = ["Căn hộ chung cư"]
+TYPE_KEYS = ["can_ho"]
 
 # Categorical features
 HUONG = ["Đông", "Tây", "Nam", "Bắc", "Đông Nam", "Đông Bắc", "Tây Nam", "Tây Bắc"]
@@ -81,50 +81,23 @@ COMMON_FEATURES = [
 ]
 
 TYPE_FEATURES = {
-    "Nha pho": COMMON_FEATURES + [
-        "do_sau", "do_rong_duong", "vi_tri_mat_tien", "co_kinh_doanh",
-        "chat_luong_xay_dung", "tuoi_nha", "co_san_thuong"
-    ],
-    "Biet thu": [
-        "dien_tich_dat", "quan", "phuong", "so_phong_ngu", "so_phong_tam",
-        "so_tang", "huong_nha", "nam_xay_dung", "mat_tien",
-        "khoang_cach_trung_tam", "phap_ly",
-        "dien_tich_san_vuon", "co_be_boi", "co_gara", "loai_biet_thu",
-        "view", "chat_luong_xay_dung", "tuoi_nha"
-    ],
     "Can ho chung cu": [
         "dien_tich", "quan", "phuong", "so_phong_ngu", "so_phong_tam",
         "tang", "tong_so_tang_toa_nha", "huong_nha", "nam_xay_dung",
         "view", "ten_du_an", "nam_ban_giao", "phi_quan_ly",
         "co_thang_may", "co_ham", "phap_ly", "chat_luong_xay_dung"
     ],
-    "Nha hem": COMMON_FEATURES + [
-        "do_rong_hem", "vi_tri_hem", "do_rong_duong_chinh",
-        "co_oto_vao_hem", "khoang_cach_ra_duong_chinh"
-    ],
 }
 
 # CSV columns per type
-NHA_PHO_EXTRA = ["do_sau", "do_rong_duong", "vi_tri_mat_tien", "co_kinh_doanh",
-                 "chat_luong_xay_dung", "tuoi_nha", "co_san_thuong"]
-BIET_THU_EXTRA = ["dien_tich_san_vuon", "co_be_boi", "co_gara", "loai_biet_thu",
-                  "view", "chat_luong_xay_dung", "tuoi_nha"]
 CAN_HO_EXTRA = ["tong_so_tang_toa_nha", "tang", "view", "ten_du_an", "nam_ban_giao",
                 "co_thang_may", "phi_quan_ly", "co_ham", "chat_luong_xay_dung"]
-NHA_HEM_EXTRA = ["do_rong_hem", "vi_tri_hem", "do_rong_duong_chinh",
-                 "co_oto_vao_hem", "khoang_cach_ra_duong_chinh"]
 
 CSV_COLUMNS = {
-    "Nha pho": COMMON_FEATURES + ["gia"] + NHA_PHO_EXTRA,
-    "Biet thu": ["dien_tich_dat" if c == "dien_tich" else c for c in COMMON_FEATURES] + ["gia"] + BIET_THU_EXTRA,
     "Can ho chung cu": [c for c in COMMON_FEATURES if c not in ["so_tang", "mat_tien", "khoang_cach_trung_tam"]] + ["gia"] + CAN_HO_EXTRA,
-    "Nha hem": COMMON_FEATURES + ["gia"] + NHA_HEM_EXTRA,
 }
 
 # Model paths
 MODEL_MAP = {
-    "nha_pho": MODEL_DIR / "nha_pho_model.pkl",
-    "biet_thu": MODEL_DIR / "biet_thu_model.pkl",
     "can_ho": MODEL_DIR / "can_ho_model.pkl",
-    "nha_hem": MODEL_DIR / "nha_hem_model.pkl",
 }
